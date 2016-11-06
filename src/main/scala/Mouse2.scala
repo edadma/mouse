@@ -20,6 +20,7 @@ object Mouse2 extends App {
 		val stack = new Stack
 		val control = new ArrayStack[Any]
 		val vars = new HashMap[String, Address]
+		val macros = new HashMap[String, Int]
 		var pc = 0
 		var trace = false
 		
@@ -118,7 +119,7 @@ object Mouse2 extends App {
 		def execute( env: Env ) =
 			env.stack.push(
 				if (name.length == 1)
-					name(0) - 'A'
+					name.head - 'A'
 				else
 					env.address( name )
 			)
@@ -246,15 +247,24 @@ object Mouse2 extends App {
 	val r = new PushbackReader( lines )
 	val program = new ArrayBuffer[Instruction]
 	val stack = new ArrayStack[Int]
-	
-		def add( inst: Instruction ) = program += inst
 		
 		def inst: Int = {
 		var ch = r.read
 	
 			if (ch > -1) {
 				ch match {
-					case '$' => program += Exit
+					case '$' =>
+						val c = r.read
+						
+						if (c.isLetter)
+							program += Macro( c.toChar )
+						else
+						{
+							if (c > -1)
+								r.unread( c )
+								
+							program += Exit
+						}
 					case '+' => program += Add
 					case '-' => program += Sub
 					case '*' => program += Mul
