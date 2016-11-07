@@ -3,9 +3,9 @@ package xyz.hyperreal.mouse
 import java.io._
 
 
-object Main extends App
+object TestMain extends App
 {
-	import Mouse2._
+	import Mouse._
 	
 	val code =
 		"""
