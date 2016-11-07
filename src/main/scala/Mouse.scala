@@ -84,12 +84,14 @@ object Mouse {
 	
 	private class Macro( m: Char ) extends Instruction( "macro " + m ) {
 		def execute( env: Env ) {
-			env.pc = -2
+			env.control.push( this )
 		}
 	}
 	
 	private object Return extends Instruction( "return" ) {
 		def execute( env: Env ) {
+			if (env.control.isEmpty || !env.control.top.isInstanceOf[Macro]) sys.error( "not inside macro" )
+
 			
 		}
 	}
@@ -286,8 +288,9 @@ object Mouse {
 							if (macros contains m)
 								sys.error( "macro '" + m + "' already defined" )
 								
-							program += new Macro( m )
+							program += Exit
 							macros(m) = program.length
+							program += new Macro( m )
 						}
 						else
 						{
