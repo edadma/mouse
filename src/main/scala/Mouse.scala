@@ -424,11 +424,10 @@ object Mouse {
 						}
 					case _ => sys.error( "unrecognized character: " + ch )
 				}
-				
+			
 				inst
-			}
-		
-			TOP
+			} else
+				TOP
 		}
 	
 		inst

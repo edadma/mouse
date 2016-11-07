@@ -1,4 +1,4 @@
-package xyz.hyperreal.name
+package xyz.hyperreal.mouse
 
 
 object Main extends App {
